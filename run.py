@@ -14,12 +14,13 @@ fileConfig('logging_conf.ini')                      # set up logger using ini fi
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
-alertlog = logging.getLogger('alertlog')
+alertLog = logging.getLogger('alertLog')
+chatLog = logging.getLogger('chatLog')
 
 chatlog = False                                     # chatlog setting
 run = True                                          # Run setting. Set to false to close program.
 s = openSocket()                                    # set up socket for IRC
-joinRoom(s)                                         # join channel
+joinRoom(s, logger)                                         # join channel
 readbuffer = ""
 
 while run:                                          # Run until run = False
@@ -28,6 +29,7 @@ while run:                                          # Run until run = False
     readbuffer = temp.pop()
 
     for line in temp:                               # Output messages to console and check for other instructions
+        logger.debug(line)                          # Put line into logger
         if "PING :tmi.twitch.tv" in line:           # Make sure to PONG when twitch PINGS
             pong = line.replace("PING", "PONG")
             logger.info('Received ping. Sent: ' + pong)
@@ -39,14 +41,16 @@ while run:                                          # Run until run = False
 
             if '@' + OWNER in message:              # Check if owner is tagged in message and add to alerts
                 print '\a\a\a'
-                f = open('alerts.txt', 'a')
-                f.write(user + ': ' + message + '\n')
-                f.close()
+                alertLog.info(user + ': ' + message)
 
             if chatlog:
-                f = open('chatlog.txt', 'a')
-                f.write(user + ': ' + message + '\n')
-                f.close()
+                chatLog.info(user + ': ' + message)
+
+            # if '!ping' in message:
+            #     s.send('PING :tmi.twitch.tv')
+            #     logger.info('Sent Ping.')
+            #     sendMessage(s, 'Sent Ping.')
+
 
         elif "WHISPER" in line:                      # When the line contains a whisper from a user
             user = getUser(line)

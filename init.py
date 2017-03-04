@@ -1,13 +1,10 @@
 #!/usr/local/bin/python2.7
 
 import string
-import logging
-from logging.config import fileConfig
+#import logging
+#from logging.config import fileConfig
 
-fileConfig('logging_conf.ini')
-logger = logging.getLogger()                        # set up logger using ini file
-
-def joinRoom(s):
+def joinRoom(s, logger):
     """ Protocol for joining chat room """
 
     readbuffer = ""
