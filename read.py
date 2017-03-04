@@ -1,5 +1,4 @@
-#!/usr/bin/python3
-
+#!/usr/local/bin/python2.7
 
 def getUser(line):
     """ Get user name """

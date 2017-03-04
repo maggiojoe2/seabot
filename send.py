@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/local/bin/python2.7
 
 from settings import CHANNEL
 

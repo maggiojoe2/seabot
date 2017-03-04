@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/local/bin/python2.7
 
 import string
 import re
@@ -13,6 +13,8 @@ from settings import OWNER
 fileConfig('logging_conf.ini')                      # set up logger using ini file
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
+
+alertlog = logging.getLogger('alertlog')
 
 chatlog = False                                     # chatlog setting
 run = True                                          # Run setting. Set to false to close program.
@@ -30,10 +32,10 @@ while run:                                          # Run until run = False
             pong = line.replace("PING", "PONG")
             logger.info('Received ping. Sent: ' + pong)
             s.send(pong)
-        elif "PRIVMSG" in line:                       # When the line contains a message from a channel
+        elif "PRIVMSG" in line:                     # When the line contains a message from a channel
             user = getUser(line)                    # Parse user name of message sender
             message = getMessage(line)              # Parse message
-            #print user + " typed: " + message       # Print message to console
+            #print user + " typed: " + message      # Print message to console
 
             if '@' + OWNER in message:              # Check if owner is tagged in message and add to alerts
                 print '\a\a\a'
@@ -46,7 +48,7 @@ while run:                                          # Run until run = False
                 f.write(user + ': ' + message + '\n')
                 f.close()
 
-        elif "WHISPER" in line:                       # When the line contains a whisper from a user
+        elif "WHISPER" in line:                      # When the line contains a whisper from a user
             user = getUser(line)
             message = getMessage(line)
             print user + " WHISPERED: " + message
