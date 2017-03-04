@@ -2,11 +2,18 @@
 
 import string
 import re
+import logging
+from logging.config import fileConfig
 from mysocket import openSocket
 from send import sendMessage, sendWhisper
 from init import joinRoom
 from read import getUser, getMessage
 from settings import OWNER
+
+fileConfig('logging_conf.ini')
+logger = logging.getLogger()                        # set up logger using ini file
+logger.setLevel(logging.DEBUG)
+logger.debug('this works please')
 
 chatlog = False                                     # chatlog setting
 run = True                                          # Run setting. Set to false to close program.
