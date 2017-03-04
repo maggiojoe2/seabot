@@ -9,10 +9,6 @@ def openSocket():
 	s.send("PASS " + PASS + "\r\n")
 	s.send("NICK " + NICK + "\r\n")
 	s.send("CAP REQ :twitch.tv/membership \r\n")
-	s.send("JOIN #" + CHANNEL + ",#seab0t95" + "\r\n")
+	s.send("CAP REQ :twitch.tv/commands \r\n")
+	s.send("JOIN #" + CHANNEL + "\r\n")
 	return s
-
-def sendMessage(s, message):
-	messagetemp = "PRIVMSG #" + CHANNEL + " :" + message
-	s.send(messagetemp + "\r\n")
-	print("Sent: " + messagetemp)
