@@ -1,6 +1,11 @@
 #!/usr/bin/python3
 
 import string
+import logging
+from logging.config import fileConfig
+
+fileConfig('logging_conf.ini')
+logger = logging.getLogger()                        # set up logger using ini file
 
 def joinRoom(s):
     """ Protocol for joining chat room """
@@ -17,7 +22,7 @@ def joinRoom(s):
             if loading != True:
                 break
 
-    print 'Successfully joined chat!'
+    logger.info('Successfully joined chat!')
     # sendMessage(s, "Successfully joined chat!")
 
 def loadingComplete(line):

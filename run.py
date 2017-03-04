@@ -10,10 +10,9 @@ from init import joinRoom
 from read import getUser, getMessage
 from settings import OWNER
 
-fileConfig('logging_conf.ini')
-logger = logging.getLogger()                        # set up logger using ini file
+fileConfig('logging_conf.ini')                      # set up logger using ini file
+logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
-logger.debug('this works please')
 
 chatlog = False                                     # chatlog setting
 run = True                                          # Run setting. Set to false to close program.
@@ -27,10 +26,9 @@ while run:                                          # Run until run = False
     readbuffer = temp.pop()
 
     for line in temp:                               # Output messages to console and check for other instructions
-        # print line
         if "PING :tmi.twitch.tv" in line:           # Make sure to PONG when twitch PINGS
             pong = line.replace("PING", "PONG")
-            print pong
+            logger.info('Received ping. Sent: ' + pong)
             s.send(pong)
         elif "PRIVMSG" in line:                       # When the line contains a message from a channel
             user = getUser(line)                    # Parse user name of message sender
