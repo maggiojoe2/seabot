@@ -28,7 +28,7 @@ while run:                                          # Run until run = False
         elif "PRIVMSG" in line:                       # When the line contains a message from a channel
             user = getUser(line)                    # Parse user name of message sender
             message = getMessage(line)              # Parse message
-            print user + " typed: " + message       # Print message to console
+            #print user + " typed: " + message       # Print message to console
 
             if '@' + OWNER in message:              # Check if owner is tagged in message and add to alerts
                 print '\a\a\a'
@@ -51,6 +51,6 @@ while run:                                          # Run until run = False
                 if chatlog:
                     chatlog = False
                     sendWhisper(s, user, 'Toggled chatlog off')
-                else chatlog:
+                else:
                     chatlog = True
                     sendWhisper(s, user, 'Toggled chatlog on')
