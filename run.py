@@ -1,9 +1,11 @@
 #!/usr/local/bin/python2.7
 
+import time
 import string
 import re
 import logging
 from logging.config import fileConfig
+
 from mysocket import openSocket
 from send import sendMessage, sendWhisper
 from init import joinRoom
@@ -22,6 +24,8 @@ run = True                                          # Run setting. Set to false 
 s = openSocket()                                    # set up socket for IRC
 joinRoom(s, logger)                                         # join channel
 readbuffer = ""
+timer = time.time()
+# logger.info(timer)
 
 while run:                                          # Run until run = False
     readbuffer = readbuffer + s.recv(1024)          # Read messages from IRC line by line
@@ -29,9 +33,16 @@ while run:                                          # Run until run = False
     readbuffer = temp.pop()
 
     for line in temp:                               # Output messages to console and check for other instructions
+        logger.info('here')
+        curtimer = time.time() - timer                  # Timer for checking connection
+        logger.info(curtimer)
+        if curtimer >= 10:
+            logger.info('Ten Seconds.')
+            timer = time.time()
+
         logger.debug(line)                          # Put line into logger
         if "PING :tmi.twitch.tv" in line:           # Make sure to PONG when twitch PINGS
-            pong = line.replace("PING", "PONG")
+            pong = line.replace("PING :", "PONG ")
             logger.info('Received ping. Sent: ' + pong)
             s.send(pong)
         elif "PRIVMSG" in line:                     # When the line contains a message from a channel
