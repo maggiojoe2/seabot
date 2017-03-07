@@ -24,7 +24,7 @@ run = True                                          # Run setting. Set to false 
 s = openSocket()                                    # set up socket for IRC
 joinRoom(s, logger)                                         # join channel
 readbuffer = ""
-timer = time.time()
+# timer = time.time()
 # logger.info(timer)
 
 while run:                                          # Run until run = False
@@ -33,16 +33,17 @@ while run:                                          # Run until run = False
     readbuffer = temp.pop()
 
     for line in temp:                               # Output messages to console and check for other instructions
-        logger.info('here')
-        curtimer = time.time() - timer                  # Timer for checking connection
-        logger.info(curtimer)
-        if curtimer >= 10:
-            logger.info('Ten Seconds.')
-            timer = time.time()
+        # logger.info('here')
+        # curtimer = time.time() - timer            # Timer for checking connection
+        # logger.info(curtimer)
+        # if curtimer >= 10:
+        #     logger.info('Ten Seconds.')
+        #     timer = time.time()
 
-        logger.debug(line)                          # Put line into logger
+        logger.info(line)                           # Put line into logger
         if "PING :tmi.twitch.tv" in line:           # Make sure to PONG when twitch PINGS
-            pong = line.replace("PING :", "PONG ")
+            pong = line.replace("PING", "PONG")
+            pong += "\n\r"
             logger.info('Received ping. Sent: ' + pong)
             s.send(pong)
         elif "PRIVMSG" in line:                     # When the line contains a message from a channel
@@ -66,13 +67,21 @@ while run:                                          # Run until run = False
         elif "WHISPER" in line:                      # When the line contains a whisper from a user
             user = getUser(line)
             message = getMessage(line)
-            print user + " WHISPERED: " + message
+            # print user + " WHISPERED: " + message
 
             regex = re.compile('!logchat.*')
             if regex.match(message):
                 if chatlog:
                     chatlog = False
-                    sendWhisper(s, user, 'Toggled chatlog off')
+                    sendWhisper(s, user, 'Toggled chatlog off\r\n')
                 else:
                     chatlog = True
-                    sendWhisper(s, user, 'Toggled chatlog on')
+                    sendWhisper(s, user, 'Toggled chatlog on\r\n')
+
+            if message == "!quit\r" and user == OWNER:
+                logger.info('closing down')
+                s.close()
+                run = False
+                break
+
+logger.info('Successfully shut down.')
