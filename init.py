@@ -15,6 +15,7 @@ def joinRoom(s, logger):
         readbuffer = temp.pop()
 
         for line in temp:
+            logger.debug(line)
             loading = loadingComplete(line)
             if loading != True:
                 break
